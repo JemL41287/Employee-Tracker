@@ -118,4 +118,80 @@ function viewAllRoles() {
   });
 }
 
+function addEmployee() {
+  updateServer();
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "first_name",
+        message: "What is the employee's first name?"
+      },
+      {
+        type: "input",
+        name: "last_name",
+        message: "What is the employee's last name?"
+      },
+      {
+        name: "role",
+        type: "list",
+        message: "What is the employee's role?",
+        choices: allroles
+      }
+    ])
+    .then(function(answer) {
+      var query = connection.query(
+        "INSERT INTO employee SET ?",
+        {
+          first_name: answer.first_name,
+          last_name: answer.last_name,
+          role_id: answer.role
+        },
+        function(err, res) {
+          if (err) throw err;
+          console.table("\nNew Employee Added\n")
+          startEmployeeManager();
+        }
+        );
+    });
+}
+
+function addRole() {
+  updateServer();
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "new_role",
+        message: "What role would you like to add?"
+      },
+      {
+        type: "input",
+        name: "new_salary",
+        message: "What is the salary for this role?"
+      },
+      {
+        name: "department",
+        type: "list",
+        message: "Which department does this role fall under?",
+        choices: alldepartments
+      }
+    ])
+    .then(function(answer) {
+      var query = connection.query(
+        "INSERT INTO role SET ?",
+        {
+          title: answer.new_role,
+          salary: answer.new_salary,
+          department_id: answer.department
+        },
+        function(err, res) {
+          if (err) throw err;
+          console.table("\nNew Role Added\n")
+          startEmployeeManager();
+        }
+        );
+    });
+}
+
 
