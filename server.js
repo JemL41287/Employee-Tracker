@@ -149,7 +149,7 @@ function addEmployee() {
         },
         function(err, res) {
           if (err) throw err;
-          console.table("\nNew Employee Added\n")
+          console.table("\nNew Employee Added.\n")
           startEmployeeManager();
         }
         );
@@ -187,10 +187,48 @@ function addRole() {
         },
         function(err, res) {
           if (err) throw err;
-          console.table("\nNew Role Added\n")
+          console.table("\nNew Role Added.\n")
           startEmployeeManager();
         }
         );
+    });
+}
+
+function updateEmployeeRole() {
+  updateServer();
+  inquirer
+    .prompt([
+      {
+        name: "employee",
+        type: "list",
+        message: "Who would you like to update?",
+        choices: allemployees
+      },
+      {
+        name: "role",
+        type: "list",
+        message: "What is the new role of this employee?",
+        choices: allroles
+      }
+    ])
+    .then(function(answer) {
+      var query = connection.query(
+        "UPDATE employee SET ? WHERE ?",
+        [
+          {
+            role_id: answer.role
+          },
+          {
+            id: answer.employee
+          }
+        ],
+        function(err, res) {
+          if (err) throw err;
+          console.table("\nThis employee's role has been updated.\n");
+          updateServer();
+          startEmployeeManager();
+        }
+      );
     });
 }
 
