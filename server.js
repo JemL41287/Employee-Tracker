@@ -16,7 +16,7 @@ function updateServer() {
   });
 
   connection.query("SELECT * from department", function (err, res) {
-    alldepartments = res.map(dept => ({ name: dept.title, value: dept.id }));
+    alldepartments = res.map(dept => ({ name: dept.name, value: dept.id }));
   });
 
   connection.query("SELECT * from employee", function (err, res) {
@@ -82,6 +82,7 @@ function startEmployeeManager() {
           break;
 
         case "Exit":
+          console.log("Application ended.")
           connection.end();
           break;
       }
